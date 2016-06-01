@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>放大镜</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style type="text/css">
+    		#minWrap{
+    			position: relative;
+    			border:  1px solid #ccc;
+    			width: 350px;
+    			height: 350px;
+    		}
+
+    		#minWrap img{
+    			width: 350px;
+    			height: 350px;
+    		}
+
+    		#slider{
+    			width: 175px;
+    			height: 175px;
+    			background-color: yellow;
+    			position: absolute;
+    			left: 0;
+    			top: 0;
+    			opacity: 0.3;
+    			display: none;
+    		}
+
+    		#maxWrap{
+    			position: absolute;
+    			left: 370px;
+    			top: 10px;
+    			width: 400px;
+    			height: 400px;
+    			border: 1px solid #CCCCCC;
+    			/*超出隐藏*/
+    			overflow: hidden;
+    			display: none;
+    		}
+
+    		#maxWrap img{
+    			position: absolute;
+    		}
+    </style>
+    <script type="text/javascript">
+    	function helloworld(){
+			alert("hello world!")
+		}
+   		document.addEventListener('plusready', function(){
+   			alert("welcome to Html5plus!");
+   		});
+
+    </script>
+</head>
+<body>
+	<div id="minWrap">
+		<img src="max.jpg"/>
+		<div id="slider">
+
+		</div>
+	</div>
+
+	<div id="maxWrap">
+		<img src="max.jpg"/>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function ($) {
+		// 鼠标移动事件
+		$("#minWrap").mousemove(function (event) {
+			$("#slider").show();
+			$("#maxWrap").show();
+			// 从事件里面找位置
+			// 小黄快(滑块)的横向位置
+			var x = event.clientX - $("#slider").width() / 2 - $("#minWrap").offset().left;
+//			console.log(x);
+			var y = event.clientY - $("#slider").height() / 2 - $("#minWrap").offset().top;
+
+      // 最大宽度
+			var maxX = $("#minWrap").width() - $("#slider").width();
+			if (x <= 0) {
+				x = 0;
+			}else if(  x >= maxX) {
+				x = maxX;
+			}
+
+      // 最大高度
+			var maxY = $("#minWrap").height() - $("#slider").height();
+			if (y <= 0) {
+				y = 0;
+			}else if (y >= maxY) {
+				y = maxY;
+			}
+
+//			console.log(x);
+
+			// 滑块动
+			$("#slider").css({left:x , top:y});
+
+			// 比例
+			// 当前移动的位置 / 可以移动的位置
+			var scaleX = x / maxX;
+			var scaleY = y / maxY;
+
+      // 大图动
+			$("#maxWrap img").css({
+				left: - scaleX * ($("#maxWrap img").width() - $("#maxWrap").width()),
+				top: - scaleY * ($("#maxWrap img").height() - $("#maxWrap").height())
+			});
+		});
+
+		// 鼠标离开    滑块和大div隐藏
+		$("#minWrap").mouseleave(function () {
+			$("#slider").hide();
+			$("#maxWrap").hide();
+		});
+	});
+
+</script>
+</html>
